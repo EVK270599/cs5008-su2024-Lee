@@ -1,6 +1,5 @@
-// name: <your name here>
-// email: <your email here>
-
+// name: Kaustubha Eluri
+// email: eluri.k@northeastern.edu
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,16 +23,16 @@ void printGraphAsMatrix(graph_t g, int size){
   for (i=0; i<size; i++) {
     for (j=0; j<size; j++) {
       if (g[i][j]) {
-	printf("|true");
+        printf("|true");
       } else {
-	printf("| -- ");
+        printf("| -- ");
       }
     }
     printf("|\n");
   }
 }
 
-// print the graph as an list of edges
+// print the graph as a list of edges
 void printGraphAsList(graph_t g, int size){
   int i, j;
 
@@ -42,7 +41,7 @@ void printGraphAsList(graph_t g, int size){
   for (i=0; i<size; i++) {
     for (j=0; j<size; j++) {
       if (g[i][j]) {
-	printf("%d -> %d\n",i,j);
+        printf("%d -> %d\n",i,j);
       } 
     }
   }
@@ -155,19 +154,19 @@ int dequeue(queue_t* q_p) {
     n_p = q_p->head_p;  // get a pointer to the head of the queue
 
     if (n_p != NULL) {
-	t = n_p->data;      // get the value of data in the head of the queue
+        t = n_p->data;      // get the value of data in the head of the queue
 
-	if (q_p->head_p  == q_p->tail_p) {      
+        if (q_p->head_p  == q_p->tail_p) {      
           // only one node in the queue, clear queue head and tail 
-	  q_p->head_p = NULL;
-	  q_p->tail_p = NULL;
-	} else {
+          q_p->head_p = NULL;
+          q_p->tail_p = NULL;
+        } else {
           // mulitple nodes in queue, clean up head pointer and new head of queue
-	  q_p->head_p = n_p->left_p;   // new head points to next (left of old head) element of queue
-	  q_p->head_p->right_p = NULL; // new head node has NULL right pointer
-	}
-	
-	freeNode(n_p);  // free up the node that was dequeued
+          q_p->head_p = n_p->left_p;   // new head points to next (left of old head) element of queue
+          q_p->head_p->right_p = NULL; // new head node has NULL right pointer
+        }
+        
+        freeNode(n_p);  // free up the node that was dequeued
     }
   }
     
@@ -214,7 +213,7 @@ int main () {
   int current;
   bool done[GSIZE];   // are we done with this node?
 
-  // initialize finsihed to false - not done with any node yet
+  // initialize finished to false - not done with any node yet
   for (i=0; i<GSIZE; i++) {
     done[i] = false;
   }
@@ -225,15 +224,31 @@ int main () {
   // add start node to work queue
   enqueue(q,0);
 
-  printf("\nBREADTH FIRST TRAFERSAL\n");
+  printf("\nBREADTH FIRST TRAVERSAL\n");
   while (!isEmpty(q)) {
+    // dequeue current node
+    current = dequeue(q);
+    // if the node is already done, continue
+    if (done[current]) {
+      continue;
+    }
 
-    // INSERT YOUR CODE HERE
-    
+    // mark the current node as done
+    done[current] = true;
+
+    // print the current node
+    printf("%d ", current);
+
+    // enqueue all adjacent nodes that are not done
+    for (j = 0; j < GSIZE; j++) {
+      if (E[current][j] && !done[j]) {
+        enqueue(q, j);
+      }
+    }
   }
 
   // print out nodes that are unreachable
-  printf("\nUNREACHABLE NODES: ");
+  printf("\n\nUNREACHABLE NODES: ");
   for (i=0; i<GSIZE; i++) {
     if (!done[i]) {
       printf("%d ", i);
@@ -241,7 +256,7 @@ int main () {
   }
   printf("\n");
   printf("----------\n");
-	 
+     
   // free up the queue
   freeQueue(q);
   
